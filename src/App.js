@@ -1,25 +1,90 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { useState, Suspense } from 'react';
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+} from 'react-router-dom';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
+import IconButton from '@material-ui/core/IconButton';
+import IconMenu from '@material-ui/icons/Menu'
+import Typography from '@material-ui/core/Typography';
+import { makeStyles } from '@material-ui/core/styles';
+
+import Spinner from './components/Spinner';
+import MenuDrawer from './MenuDrawer';
 import './App.css';
 
-function App() {
+const HomePage = React.lazy(() => import('./pages/Home'));
+
+const useStyles = makeStyles(theme => ({
+  '@global': {
+    body: {
+      backgroundColor: theme.palette.common.white,
+    },
+    ul: {
+      margin: 0,
+      padding: 0,
+    },
+    li: {
+      listStyle: 'none',
+    },
+  },
+  appBar: {
+    borderBottom: `1px solid ${theme.palette.divider}`,
+  },
+  appBarIcon: {
+    color: `${theme.palette.common.white}`,
+  },
+  toolbar: {
+    flexWrap: 'wrap',
+  },
+  toolbarTitle: {
+    flexGrow: 1,
+  },
+  footer: {
+    borderTop: `1px solid ${theme.palette.divider}`,
+    marginTop: theme.spacing(8),
+    paddingTop: theme.spacing(3),
+    paddingBottom: theme.spacing(3),
+    [theme.breakpoints.up('sm')]: {
+      paddingTop: theme.spacing(6),
+      paddingBottom: theme.spacing(6),
+    },
+  },
+}));
+
+const App = () => {
+  const classes = useStyles();
+
+  const [menuDrawerIsOpen, setMenuDrawerOpen] = useState(false);
+  const toggleMenuDrawer = () => setMenuDrawerOpen(!menuDrawerIsOpen);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <div>
+        <CssBaseline />
+        <MenuDrawer isOpen={menuDrawerIsOpen} onClose={toggleMenuDrawer} />
+        <AppBar position="static" elevation={0} className={classes.appBar}>
+          <Toolbar className={classes.toolbar}>
+            <IconButton onClick={toggleMenuDrawer} className={classes.appBarIcon}>
+              <IconMenu />
+            </IconButton>
+            <Typography variant="h6" color="inherit" noWrap className={classes.toolbarTitle}>
+              Tools
+            </Typography>
+          </Toolbar>
+        </AppBar>
+        <Switch>
+          <Suspense fallback={<Spinner timeout={500} />} >
+            <Route path="/">
+              <HomePage />
+            </Route>
+          </Suspense>
+        </Switch>
+      </div>
+    </Router>
   );
 }
 
