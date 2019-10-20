@@ -13,6 +13,8 @@ import Divider from '../components/Divider';
 import { encodeBase64, decodeBase64 } from '../lib/utils/base64';
 import useClipboardFill from '../lib/hooks/useClipboardFill';
 
+const getInvalidDataMessage = isEncodeMode => isEncodeMode ? 'Invalid characters in input.' : 'Invalid Base 64 input.'
+
 const EncodeSwitch = withStyles(theme => ({
   root: {
     width: 48,
@@ -111,7 +113,7 @@ const Base64 = () => {
               error={isResultInvalid}
               id="outlined-name"
               label={isEncodeMode ? 'Encoded' : 'Decoded'}
-              value={isResultInvalid ? 'Invalid Base 64 data' : result}
+              value={isResultInvalid ? getInvalidDataMessage(isEncodeMode) : result}
               margin="normal"
               variant="outlined"
               className={classes.textField}
