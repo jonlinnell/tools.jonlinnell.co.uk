@@ -14,11 +14,13 @@ import Tooltip from '@material-ui/core/Tooltip';
 import IconCopy from '@material-ui/icons/AssignmentReturned';
 import IconClear from '@material-ui/icons/Clear';
 
-import Container from '../components/Container';
+import Page from '../components/Page';
 import { Title2 } from '../components/titles';
 import Divider from '../components/Divider';
 
 import zalgo, { ZALGO_AMOUNTS, ZALGO_DIRECTIONS } from '../lib/utils/zalgo';
+import registerEvent from '../lib/analytics/registerEvent';
+import * as events from '../lib/analytics/events';
 
 const useStyles = makeStyles(theme => ({
   textFieldContainerGrid: {
@@ -50,29 +52,42 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const Zalgo = () => {
-
   const classes = useStyles();
 
   const [inputData, setInputData] = useState('');
   const handleChange = event => setInputData(event.target.value);
 
   const [direction, setDirection] = useState(ZALGO_DIRECTIONS.MID);
-  const handleChangeDirection = event => setDirection(event.target.value);
+  const handleChangeDirection = (event) => {
+    const { value } = event.target;
+    registerEvent(events.zalgo_set_direction(value));
 
-  const [amount, setAmount] = useState(ZALGO_AMOUNTS.STD);
-  const handleChangeAmount = event => setAmount(event.target.value);
+    setDirection(value);
+  }
 
-  const result = zalgo(inputData, { direction, amount });
+  const [magnitude, setMagnitude] = useState(ZALGO_AMOUNTS.STD);
+  const handleChangeAmount = (event) => {
+    const { value } = event.target;
+    registerEvent(events.zalgo_set_magnitude(value));
+    
+    setMagnitude(value);
+  }
+
+  const [inputEventTimeout, setInputEventTimeout] = useState();
+
+  const result = zalgo(inputData, { direction, magnitude });
 
   const handleClear = () => {
+    registerEvent(events.zalgo_reset());
+
     setInputData('');
     setDirection(ZALGO_DIRECTIONS.MID);
-    setAmount(ZALGO_AMOUNTS.STD);
+    setMagnitude(ZALGO_AMOUNTS.STD);
   }
   const handleCopyToClipboard = () => navigator.clipboard.writeText(result);
 
   return (
-    <Container>
+    <Page>
       <Title2>Z̀̕͜͠҉a͏̶̴ļ̷̛́g̨̡͏̀ơ̴̷̧͜</Title2>
       I'm scared of adding any Zalgo text here in case I break git.
       <Divider />
@@ -86,6 +101,10 @@ const Zalgo = () => {
               margin="normal"
               variant="outlined"
               className={classes.textField}
+              onKeyUp={() => {
+                clearTimeout(inputEventTimeout);
+                setInputEventTimeout(setTimeout(() => registerEvent(events.zalgo_encode(inputData)), 2000))
+              }}
               multiline
             />
           </Grid>
@@ -117,7 +136,7 @@ const Zalgo = () => {
           <Grid item xs={12} lg={3} md={5}>
             <FormControl component="fieldset">
               <FormLabel>Magnitude</FormLabel>
-              <RadioGroup value={amount} onChange={handleChangeAmount} row>
+              <RadioGroup value={magnitude} onChange={handleChangeAmount} row>
                 <FormControlLabel
                   value={ZALGO_AMOUNTS.MINI}
                   control={<Radio color="primary" />}
@@ -159,7 +178,7 @@ const Zalgo = () => {
             {result}
           </pre>
         </div>
-    </Container>
+    </Page>
   )
 };
 

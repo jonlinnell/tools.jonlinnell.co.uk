@@ -1,13 +1,13 @@
 import React from 'react';
 
 import { Title2 } from '../components/titles';
-import Container from '../components/Container';
+import Page from '../components/Page';
 
 const HomePage = () => (
-  <Container>
+  <Page>
     <Title2>Why?</Title2>
     I realised I was Googling 'Base 64 decoder' and 'epoch converter' all the time.
-  </Container>
+  </Page>
 );
 
 export default HomePage;
