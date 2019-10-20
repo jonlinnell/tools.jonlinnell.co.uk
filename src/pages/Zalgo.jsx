@@ -9,6 +9,7 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import IconButton from '@material-ui/core/IconButton';
+import Tooltip from '@material-ui/core/Tooltip';
 
 import IconCopy from '@material-ui/icons/AssignmentReturned';
 import IconClear from '@material-ui/icons/Clear';
@@ -140,12 +141,16 @@ const Zalgo = () => {
           </Grid>
           <Grid item xs={12} lg={2} md={2}>
             <div className={classes.buttons}>
-              <IconButton onClick={handleCopyToClipboard}>
-                <IconCopy />
-              </IconButton>
-              <IconButton onClick={handleClear}>
-                <IconClear />
-              </IconButton>
+              <Tooltip enterDelay={400} title="Copy to clipboard">
+                <IconButton onClick={handleCopyToClipboard}>
+                  <IconCopy />
+                </IconButton>
+              </Tooltip>
+              <Tooltip enterDelay={400} title="Reset">
+                <IconButton onClick={handleClear}>
+                  <IconClear />
+                </IconButton>
+              </Tooltip>
             </div>
           </Grid>
         </Grid>
