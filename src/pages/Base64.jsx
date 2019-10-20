@@ -7,11 +7,13 @@ import lightGreen from '@material-ui/core/colors/lightGreen';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
 
 import { Title2 } from '../components/titles';
-import Container from '../components/Container';
+import Page from '../components/Page';
 import Divider from '../components/Divider';
 
 import { encodeBase64, decodeBase64 } from '../lib/utils/base64';
-import useClipboardFill from '../lib/hooks/useClipboardFill';
+import useClipboardPaste from '../lib/hooks/useClipboardPaste';
+import registerEvent from '../lib/analytics/registerEvent';
+import * as events from '../lib/analytics/events';
 
 const getInvalidDataMessage = isEncodeMode => isEncodeMode ? 'Invalid characters in input.' : 'Invalid Base 64 input.'
 
@@ -66,11 +68,13 @@ const Base64 = () => {
   const handleToggle = (event) => {
     const { checked } = event.target;
 
+    registerEvent(events.base64_toggle_mode(checked ? 'encode' : 'decode'));
+
     !checked && setInputData('');
     setEncodeMode(checked);
   };
 
-  useClipboardFill(setInputData);
+  useClipboardPaste(setInputData, data => registerEvent(events.base64_paste(data)));
 
   // const handleChange = name => event => setValues({ ...values, [name]: event.target.value });
   const handleChange = event => setInputData(event.target.value);
@@ -78,8 +82,11 @@ const Base64 = () => {
   const result = isEncodeMode ? encodeBase64(inputData) : decodeBase64(inputData);
   const isResultInvalid = result === '$INVALID';
 
+  const [inputEventTimeout, setInputEventTimeout] = useState();
+  const registerInputEvent = data => registerEvent(isEncodeMode ? events.base64_encode(data) : events.base64_decode(data));
+
   return (
-    <Container>
+    <Page>
       <Title2>Base64</Title2>
       Encode or decode all that Base64 data you've got lying around.
       <Divider />
@@ -105,6 +112,10 @@ const Base64 = () => {
               margin="normal"
               variant="outlined"
               className={classes.textField}
+              onKeyUp={() => {
+                clearTimeout(inputEventTimeout);
+                inputData.length > 0 && setInputEventTimeout(setTimeout(() => registerInputEvent(inputData), 2000));
+              }}
               multiline
             />
           </Grid>
@@ -122,7 +133,7 @@ const Base64 = () => {
           </Grid>
         </Grid>
       </form>
-    </Container>
+    </Page>
   );
 }
 

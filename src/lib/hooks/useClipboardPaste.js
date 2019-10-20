@@ -1,9 +1,12 @@
 import { useEffect } from 'react';
 
-const useClipboardFill = callback => useEffect(() => {
+const useClipboardFill = (callback, analyticsCallback) => useEffect(() => {
   const pasteHandler = event => {
     event.preventDefault();
-    navigator.clipboard.readText().then(text => callback(text));
+    navigator.clipboard.readText().then(text => {
+      callback(text);
+      analyticsCallback && analyticsCallback(text);
+    });
   };
 
   document.addEventListener('paste', pasteHandler);

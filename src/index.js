@@ -4,6 +4,11 @@ import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 
+import ReactGA from 'react-ga';
+
+const { REACT_APP_GA_ID, REACT_APP_GA_DEBUG } = process.env;
+ReactGA.initialize(REACT_APP_GA_ID, { debug: REACT_APP_GA_DEBUG })
+
 ReactDOM.render(<App />, document.getElementById('root'));
 
 // If you want your app to work offline and load faster, you can change
