@@ -7,6 +7,8 @@ import List from '@material-ui/core/List';
 import { default as ListItemLinkSomething } from './ListItemLink';
 
 import {makeStyles} from '@material-ui/core/styles';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
 
 const useStyles = makeStyles(theme => ({
   fullList: {
@@ -24,6 +26,10 @@ const MenuDrawer = ({ isOpen, onClose }) => {
       <List className={classes.fullList}>
         <ListItemLink icon={<IconHome />} to="/" >Home</ListItemLink>
         <Divider />
+        <ListItem>
+          <ListItemText>String Encoding</ListItemText>
+        </ListItem>
+        <ListItemLink to="/base64" variant="subitem">Base 64</ListItemLink>
       </List>
     </Drawer>
   );

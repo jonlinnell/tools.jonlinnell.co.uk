@@ -13,10 +13,11 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 
 import Spinner from './components/Spinner';
-import MenuDrawer from './MenuDrawer';
+import MenuDrawer from './components/MenuDrawer';
 import './App.css';
 
 const HomePage = React.lazy(() => import('./pages/Home'));
+const Base64Page = React.lazy(() => import('./pages/Base64'));
 
 const useStyles = makeStyles(theme => ({
   '@global': {
@@ -76,13 +77,12 @@ const App = () => {
             </Typography>
           </Toolbar>
         </AppBar>
-        <Switch>
           <Suspense fallback={<Spinner timeout={500} />} >
-            <Route path="/">
-              <HomePage />
-            </Route>
+            <Switch>
+              <Route path="/base64"><Base64Page /></Route>
+              <Route path="/"><HomePage /></Route>
+            </Switch>
           </Suspense>
-        </Switch>
       </div>
     </Router>
   );

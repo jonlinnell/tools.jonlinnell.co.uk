@@ -7,7 +7,9 @@ const useStyles = makeStyles(theme => ({
   h2: {
     margin: `${theme.spacing(0, 0, 2)}`
   },
-  h3: {},
+  h3: {
+    margin: `${theme.spacing(0, 0, 2)}`
+  },
   h4: {},
   h5: {},
 }));
