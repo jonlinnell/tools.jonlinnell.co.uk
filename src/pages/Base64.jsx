@@ -2,15 +2,18 @@ import React, { useState } from 'react';
 import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
 import Switch from '@material-ui/core/Switch';
-import Divider from '@material-ui/core/Divider';
 import orange from '@material-ui/core/colors/orange';
 import lightGreen from '@material-ui/core/colors/lightGreen';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
 
 import { Title2 } from '../components/titles';
 import Container from '../components/Container';
+import Divider from '../components/Divider';
 
-import { encodeBase64, decodeBase64 } from '../lib/base64';
+import { encodeBase64, decodeBase64 } from '../lib/utils/base64';
+import useClipboardFill from '../lib/hooks/useClipboardFill';
+
+const getInvalidDataMessage = isEncodeMode => isEncodeMode ? 'Invalid characters in input.' : 'Invalid Base 64 input.'
 
 const EncodeSwitch = withStyles(theme => ({
   root: {
@@ -51,9 +54,6 @@ const useStyles = makeStyles(theme => ({
   },
   textField: {
     width: '100%'
-  },
-  divider: {
-    margin: `${theme.spacing(3, 0)}`
   }
 }));
 
@@ -70,6 +70,8 @@ const Base64 = () => {
     setEncodeMode(checked);
   };
 
+  useClipboardFill(setInputData);
+
   // const handleChange = name => event => setValues({ ...values, [name]: event.target.value });
   const handleChange = event => setInputData(event.target.value);
 
@@ -80,7 +82,7 @@ const Base64 = () => {
     <Container>
       <Title2>Base64</Title2>
       Encode or decode all that Base64 data you've got lying around.
-      <Divider light className={classes.divider} />
+      <Divider />
       <Grid component="label" container alignItems="center" spacing={1}>
         <Grid item>Decode</Grid>
         <Grid item>
@@ -111,7 +113,7 @@ const Base64 = () => {
               error={isResultInvalid}
               id="outlined-name"
               label={isEncodeMode ? 'Encoded' : 'Decoded'}
-              value={isResultInvalid ? 'Invalid Base 64 data' : result}
+              value={isResultInvalid ? getInvalidDataMessage(isEncodeMode) : result}
               margin="normal"
               variant="outlined"
               className={classes.textField}

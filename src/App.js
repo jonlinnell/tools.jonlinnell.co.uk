@@ -16,8 +16,10 @@ import Spinner from './components/Spinner';
 import MenuDrawer from './components/MenuDrawer';
 import './App.css';
 
-const HomePage = React.lazy(() => import('./pages/Home'));
+import HomePage from './pages/Home';
+
 const Base64Page = React.lazy(() => import('./pages/Base64'));
+const ZalgoPage = React.lazy(() => import('./pages/Zalgo'));
 
 const useStyles = makeStyles(theme => ({
   '@global': {
@@ -80,6 +82,7 @@ const App = () => {
           <Suspense fallback={<Spinner timeout={500} />} >
             <Switch>
               <Route path="/base64"><Base64Page /></Route>
+              <Route path="/zalgo"><ZalgoPage /></Route>
               <Route path="/"><HomePage /></Route>
             </Switch>
           </Suspense>

@@ -30,6 +30,7 @@ const MenuDrawer = ({ isOpen, onClose }) => {
           <ListItemText>String Encoding</ListItemText>
         </ListItem>
         <ListItemLink to="/base64" variant="subitem">Base 64</ListItemLink>
+        <ListItemLink to="/zalgo" variant="subitem">Z̶̸̵͢a͘͞͞l̢͠͝͠g̢̕o̸̧͏</ListItemLink>
       </List>
     </Drawer>
   );
