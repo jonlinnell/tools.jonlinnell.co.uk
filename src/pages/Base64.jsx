@@ -10,7 +10,8 @@ import { makeStyles, withStyles } from '@material-ui/core/styles';
 import { Title2 } from '../components/titles';
 import Container from '../components/Container';
 
-import { encodeBase64, decodeBase64 } from '../lib/base64';
+import { encodeBase64, decodeBase64 } from '../lib/utils/base64';
+import useClipboardFill from '../lib/hooks/useClipboardFill';
 
 const EncodeSwitch = withStyles(theme => ({
   root: {
@@ -69,6 +70,8 @@ const Base64 = () => {
     !checked && setInputData('');
     setEncodeMode(checked);
   };
+
+  useClipboardFill(setInputData);
 
   // const handleChange = name => event => setValues({ ...values, [name]: event.target.value });
   const handleChange = event => setInputData(event.target.value);
