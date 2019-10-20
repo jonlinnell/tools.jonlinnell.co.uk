@@ -4,7 +4,7 @@ import Drawer from '@material-ui/core/Drawer';
 import IconHome from '@material-ui/icons/Home';
 import List from '@material-ui/core/List';
 
-import {default as ListItemLinkSomething} from './ListItemLink';
+import { default as ListItemLinkSomething } from './ListItemLink';
 
 import {makeStyles} from '@material-ui/core/styles';
 
@@ -17,7 +17,7 @@ const useStyles = makeStyles(theme => ({
 const MenuDrawer = ({ isOpen, onClose }) => {
   const classes = useStyles();
 
-  const ListItemLink = ({ ...props }) => <ListItemLinkSomething onClick={onClose} {...props} />
+  const ListItemLink = props => <ListItemLinkSomething onClick={onClose} {...props} />
 
   return (
     <Drawer anchor="left" open={isOpen} onClose={onClose} className={classes.drawer}>
